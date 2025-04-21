@@ -1,10 +1,11 @@
+import json
 from enum import Enum
 from typing import Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
-from app.content_generator.openai_gen import OpenAIContentGenerator
+from app.content_generator.llama_gen import LlamaContentGenerator
 
 router = APIRouter()
 
@@ -44,28 +45,44 @@ class MessageRequest(BaseModel):
 
 
 class MessageResponse(BaseModel):
-    message: str
+    status: bool
+    messages: list[str]
 
 
 @router.post("/generate-message", response_model=MessageResponse)
-def generate_ai_message(payload: MessageRequest):
+def generate_gift_message(payload: MessageRequest):
     """
     Generate a custom AI message based on relationship, tone, and occasion.
     """
 
-    base = (
-        f"This is a {payload.tone} message for your {payload.relationship} "
-        f"on their {payload.occasion}."
-    )
+    occasion = payload.occasion.value
+    tone = payload.tone.value
+    relationship = payload.relationship.value
+    note = payload.note
 
-    if payload.note:
-        base += f" Here's a special note: {payload.note}"
-
-    # This is where you'd plug in your real AI generation logic (OpenAI, etc.)
-    ai_message = OpenAIContentGenerator().generate_gift_message(
-        purpose=payload.occasion.value,
-        tone=payload.tone.value,
-        audience=payload.relationship.value,
-        note=payload.note if payload.note else "",
+    prompt = (
+        f"Generate 5 different {tone} messages for the occasion: {occasion}. "
+        f"The messages should be suitable for: {relationship}."
     )
-    return MessageResponse(message=ai_message)
+    if note:
+        prompt += f" Additional note: {note}"
+
+    prompt += (
+        "Respond in JSON format:\n"
+        "{\n"
+        '  "messages": [\n'
+        '    "msg 1",\n'
+        '    "msg 2",\n'
+        '    "msg 3",\n'
+        '    "msg 4",\n'
+        '    "msg 5"\n'
+        "  ]\n"
+        "}\n"
+        "\n"
+        "Only return the JSON. Do not include any explanations or extra text."
+    )
+    content_generator = LlamaContentGenerator()
+    content = content_generator.generate_content(prompt)
+    parsed = json.loads(content)
+    response = parsed["messages"]
+    return {"status": True, "messages": response}

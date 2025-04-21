@@ -21,16 +21,7 @@ class OpenAIContentGenerator(ContentGenerator):
         openai.api_key = self.api_key
         return openai
 
-    def generate_gift_message(
-        self, purpose: str, tone: str, audience: str, note: str
-    ) -> str:
-
-        prompt = (
-            f"Generate 5 different {tone} messages for the purpose: {purpose}.\n"  # noqa
-            f"The messages should be suitable for: {audience}."
-        )
-        if note:
-            prompt += f"\nAdditional note: {note}"
+    def generate_content(self, prompt: str) -> str:
         generator_logger.info(f"Generating content prompt: {prompt}")
         try:
             response = self.client.chat.completions.create(
