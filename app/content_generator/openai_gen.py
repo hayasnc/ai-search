@@ -2,7 +2,7 @@ import openai
 
 from app.content_generator.base import ContentGenerator
 from app.settings import OPEN_AI_MODEL_PROVIDER, OPENAI_API_KEY
-from logger import generator_logger
+from app.utils.logger import generator_logger
 
 
 class OpenAIContentGenerator(ContentGenerator):

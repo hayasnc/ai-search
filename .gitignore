@@ -48,6 +48,7 @@ dist/
 *.egg-info/
 
 # Uvicorn logs
+logs
 *.log
 
 # Docker
