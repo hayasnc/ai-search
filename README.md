@@ -1,44 +1,20 @@
-🧠 AI Message Generator API
+# 🧠 AI Message Generator API
 
 This project is a FastAPI-based microservice that generates personalized messages using different AI models — OpenAI, Claude, Gemini, and DeepSeek. It supports model-specific backends, clean modular design, and logs generation activities to file.
 
-🚀 Features
+# 🚀 Features
 
-✉️ Generate 5 personalized messages based on:
 
-Relationship (spouse, friend, etc.)
+## 1) Generate personalized messages:
 
-Tone (funny, formal, etc.)
-
-Occasion (birthday, anniversary, etc.)
-
-Optional Note
+Generate 5 personalized messages based on:
+- Relationship (spouse, friend, etc.)
+- Tone (funny, formal, etc.)
+- Occasion (birthday, anniversary, etc.)
+- Optional Note
 
 🔌 Pluggable model support: OpenAI, Claude, Gemini, DeepSeek
-
 🔒 Rate limiting per IP (via slowapi)
-
-📄 Generator logs written to logs/generators.log
-
-📁 Project Structure
-
-.
-├── app/
-│   ├── api/
-│   │   └── v1/
-│   │       └── endpoints/
-│   │           └── generate.py
-│   ├── main.py
-│   ├── generators/
-│   │   ├── base.py
-│   │   ├── openai_gen.py
-│   │   ├── claude_gen.py
-│   │   ├── gemini_gen.py
-│   │   └── deepseek_gen.py
-│   └── utils/
-│       └── logger.py
-├── requirements.txt
-└── README.md
 
 🛠️ Setup
 
